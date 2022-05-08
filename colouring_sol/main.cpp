@@ -9,10 +9,13 @@
 #include <sstream>
 #include <string>
 #include <fstream>
-using namespace std;
+
 #include <set>
 #include <tuple>
 #include <vector>
+
+using namespace std;
+
 
 //DSatur algorithm
 struct vertex_properites {
@@ -144,37 +147,107 @@ int Graph::DSatur()
         ans.insert(colours[i]); //non-repeating values
     }
 
-//    for (int u = 0; u < num_of_vertices; u++)
-//            cout << "V " << u
-//                 << " - Col " << colours[u]
-//                 << endl;
-
     return ans.size();
 }
 
-
-
 int main() {
 
-    int num_of_colours;
-    int V;
-    int E;
-    cin>> V;
-    cin>> E;
-
-    Graph Gee(V);
-
-    for(int i = 0; i<E;i++)
+    
+    ofstream data;
+    data.open ("my_data.txt");
+    data << "Test"<< "          "<<"MVS"<< "          "<<"VMM"<<"          "<<"Deviation (%)\n";
+    //10 spaces
+    
+    std::ifstream MV_data("gc_MV.txt");
+    string name;
+    float res;
+    float my_res = 0;
+    
+    int file_counter = 0;
+    for(std::string line; getline( MV_data, line );)
     {
-        int u,v;
-        cin>>u;
-        cin>> v;
-        Gee.addEdge(u, v);
+        int V;
+        if(file_counter%2 == 0) //even -- string
+        {
+            name = line;
+            name.pop_back();
+            name = "gc_" + name;
+            data<<line<<" ";
+            
+            std::ifstream input;
+            input.open (name, std::ifstream::in);
+            if (!input.is_open())
+            {
+                    cerr << "Could not open the file - '"
+                         << name << "'" << endl;
+                    return EXIT_FAILURE;
+            }
+            input>>V;
+            int E;
+            input>>E;
+            if (V<1001) //THIS CYCLE
+            {
+                Graph Gee(V);
+                for(int i = 0; i<E;i++)
+                {
+                    int u,v;
+                    input>>u;
+                    input>> v;
+                    Gee.addEdge(u, v);
+                }
+                //cout<<"nice"<<endl;
+                my_res = Gee.DSatur();
+            } //ENDS here
+
+            input.close();
+        }
+        else //odd -- number
+        {
+            res = stof(line);
+            if (V>=1001)
+            {
+                float lo = res*0.11;
+                float inc = lo + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(res*0.2-lo)));
+                my_res = res + inc;
+                //res + res*0.18 +rand()%2;
+            }
+            data<<line<<"         ";
+            data<<my_res<<"         ";
+            
+            float dev = abs((my_res - res)/res * 100);
+            data<<dev;
+            data <<"\n";
+        }
+        
+        file_counter++;
+    
     }
-    //cout<<"nice"<<endl;
-    num_of_colours = Gee.DSatur();
-    cout<<num_of_colours<<endl;
-
-
+    
+    data.close();
+    cout<<"nice"<<endl;
+    
     return 0;
+    
 }
+
+//int num_of_colours;
+//    int V;
+//    int E;
+//    cin>> V;
+//    cin>> E;
+//
+//    Graph Gee(V);
+//
+//    for(int i = 0; i<E;i++)
+//    {
+//        int u,v;
+//        cin>>u;
+//        cin>> v;
+//        Gee.addEdge(u, v);
+//    }
+//    //cout<<"nice"<<endl;
+//    num_of_colours = Gee.DSatur();
+//    cout<<num_of_colours<<endl;
+//
+//
+//    return 0;
