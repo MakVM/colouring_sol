@@ -1,8 +1,8 @@
 solver: main.o
-	g++ main.o -o solver
+	g++ -std=c++0x main.o -o solver
 
 main.o: main.cpp
-	g++ -c main.cpp
+	g++ -std=c++0x -c main.cpp
 
 clean: 
 	rm -rf solver *.o
