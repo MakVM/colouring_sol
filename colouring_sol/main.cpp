@@ -1,14 +1,21 @@
-//
-//  main.cpp
-//  colouring_sol
-//
-//  Created by Vera Makarova on 08.05.2022.
-//
 
 #include <iostream>
+#include <map>
+#include <math.h>
+#include <vector>
+#include <iterator>
+#include <random>
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+#include <sstream>
+#include <string>
+#include <fstream>
+using namespace std;
+
+
+
+int main() {
+
+    
+    
     return 0;
 }
